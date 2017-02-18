@@ -33,9 +33,74 @@ var animateDot = function(){
 	growDot();
 };
 
+
+var animateDVD = function() {
+	img = new Image();
+	img.src = 'dvd.png';
+	var recx = 160;
+	var recy = 70;
+	var x = Math.random()*(c.width-recx);
+	var y = Math.random()*(c.height-recy);
+	window.cancelAnimationFrame(rid);
+	var drawRec = function(x,y) {
+		ctx.clearRect(0, 0, c.width, c.height);
+		console.log(rid);
+		ctx.drawImage(img,x,y,recx,recy);
+		/*
+		ctx.beginPath();
+		ctx.rect(x, y, recx, recy);
+		ctx.fill();
+		*/
+	};
+	var btmRight = function() {			
+		drawRec(x,y);
+		x++;
+		y++;
+		if (x >= c.width-recx)
+			return btmLeft();
+		if (y >= c.height-recy)
+			return uprRight();
+		rid = window.requestAnimationFrame(btmRight);
+	};
+	var btmLeft = function() {			
+		drawRec(x,y);
+		x--;
+		y++;
+		if (y >= c.height-recy)
+			return uprLeft();
+		if (x <= 0)
+			return btmRight();
+		rid = window.requestAnimationFrame(btmLeft);
+	};
+	var uprRight = function() {			
+		drawRec(x,y);
+		x++;
+		y--;
+		if (y <= 0)
+			return btmRight();
+		if (x >= c.width-recx)
+			return uprLeft();
+		rid = window.requestAnimationFrame(uprRight);
+	};
+	var uprLeft = function() {			
+		drawRec(x,y);
+		x--;
+		y--;
+		if (x <= 0)
+			return uprRight();
+		if (y <= 0)
+			return btmLeft();
+		rid = window.requestAnimationFrame(uprLeft);
+	};
+	btmRight();
+};
+
 var stopIt = function() {
 	window.cancelAnimationFrame(rid);
 };
+
+var dvd = document.getElementById('dvd');
+dvd.addEventListener('click', animateDVD);
 
 var sb = document.getElementById('sb');
 sb.addEventListener('click', stopIt);
